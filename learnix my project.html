@@ -3,60 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learnix Pro - Ultimate</title>
+    <title>Learnix Ultra - Brawl Edition</title>
     <style>
         :root {
-            --green: #58cc02; --blue: #1cb0f6; --red: #ff4b4b; --gold: #ffc107; --purple: #ce82ff; --bg: #f0f4f7;
+            --green: #58cc02; --blue: #1cb0f6; --red: #ff4b4b; --gold: #ffc107; --purple: #ce82ff; --bg: #0c121d;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; }
         
         #app {
-            width: 430px; height: 800px; background: white; border-radius: 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); overflow: hidden; position: relative;
-            display: flex; flex-direction: column; border: 8px solid #333;
+            width: 430px; height: 820px; background: #1a2436; border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5); overflow: hidden; position: relative;
+            border: 6px solid #2c3e50; display: flex; flex-direction: column;
         }
 
         .screen { display: none; padding: 25px; flex-direction: column; height: 100%; overflow-y: auto; }
         .active { display: flex; }
 
-        /* Status Bars */
-        .top-bar { display: flex; justify-content: space-around; align-items: center; padding: 15px; border-bottom: 3px solid #eee; background: white; }
-        .stat { font-weight: bold; font-size: 18px; display: flex; align-items: center; gap: 8px; }
-        .multiplier { color: var(--purple); font-size: 14px; font-weight: bold; }
+        /* Brawl Style UI */
+        .top-bar { display: flex; justify-content: space-around; align-items: center; padding: 15px; background: #253347; border-bottom: 4px solid #141c29; }
+        .stat { font-weight: bold; font-size: 18px; display: flex; align-items: center; gap: 8px; text-shadow: 2px 2px #000; }
+        .streak-badge { background: linear-gradient(to bottom, #ff9d00, #ff5e00); padding: 5px 15px; border-radius: 20px; font-size: 14px; border: 2px solid white; display: none; }
 
-        /* Buttons & UI */
+        /* Buttons */
         .btn {
-            padding: 16px; background: var(--blue); color: white; border: none; 
-            border-radius: 20px; cursor: pointer; font-weight: bold; margin: 10px 0;
-            box-shadow: 0 6px #1899d6; transition: 0.1s; font-size: 16px;
+            padding: 18px; background: var(--blue); color: white; border: none; 
+            border-radius: 20px; cursor: pointer; font-weight: 900; margin: 10px 0;
+            box-shadow: 0 6px #1289c0; transition: 0.1s; font-size: 18px; text-transform: uppercase;
         }
         .btn:active { transform: translateY(4px); box-shadow: none; }
-        .btn-green { background: var(--green); box-shadow: 0 6px #46a302; }
-        .btn-gold { background: var(--gold); box-shadow: 0 6px #d39e00; color: #333; }
-        .btn-purple { background: var(--purple); box-shadow: 0 6px #a356d4; }
+        .btn-green { background: var(--green); box-shadow: 0 6px #3e8e00; }
+        .btn-gold { background: var(--gold); box-shadow: 0 6px #c79500; color: #333; }
 
-        /* Level Map */
+        /* Level Grid */
         .level-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px 0; }
         .lvl-node { 
-            width: 70px; height: 70px; background: #e5e5e5; border-radius: 20px; 
+            width: 80px; height: 80px; background: #34495e; border-radius: 25px; 
             display: flex; justify-content: center; align-items: center; 
-            font-weight: bold; cursor: pointer; box-shadow: 0 5px #ccc;
+            font-weight: 900; cursor: pointer; box-shadow: 0 6px #222; font-size: 24px;
         }
-        .lvl-node.unlocked { background: var(--green); color: white; box-shadow: 0 5px #46a302; }
+        .lvl-node.unlocked { background: var(--green); box-shadow: 0 6px #3e8e00; }
 
-        /* Quiz */
-        .q-header { display: flex; justify-content: space-between; margin-bottom: 20px; color: #888; }
+        /* Quiz Options */
         .option { 
-            background: white; border: 3px solid #e5e5e5; padding: 15px; 
-            border-radius: 18px; margin: 8px 0; cursor: pointer; font-weight: 500;
+            background: #2c3e50; border: 3px solid #3e5871; padding: 18px; 
+            border-radius: 20px; margin: 10px 0; cursor: pointer; font-weight: 600;
+            transition: 0.2s; font-size: 16px;
         }
-        .option:hover { border-color: var(--blue); background: #f0f8ff; }
+        .option:hover { background: #3e5871; border-color: var(--blue); }
 
-        .pet { width: 130px; align-self: center; margin-bottom: 15px; }
-        .speech-bubble { 
-            background: #fff; border: 3px solid #eee; padding: 15px; 
-            border-radius: 20px; position: relative; margin-bottom: 20px; font-size: 15px;
+        /* Popups / Effects */
+        #effect-text {
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 40px; font-weight: 900; color: var(--gold); text-shadow: 4px 4px #000;
+            pointer-events: none; z-index: 100; opacity: 0; transition: 0.5s;
         }
+        .animate-effect { animation: popEffect 0.8s ease-out; }
+        @keyframes popEffect { 0% { opacity: 0; transform: translate(-50%, -20%) scale(0.5); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } 100% { opacity: 0; transform: translate(-50%, -80%) scale(1); } }
     </style>
 </head>
 <body>
@@ -65,63 +67,78 @@
     <div id="topBar" class="top-bar" style="display:none;">
         <div class="stat">❤️ <span id="h-val">5</span></div>
         <div class="stat">💎 <span id="g-val">0</span></div>
-        <div id="multDisplay" class="multiplier"></div>
+        <div class="stat">🏆 <span id="p-val">0</span></div>
     </div>
+    
+    <div id="effect-text">GREAT JOB!</div>
 
-    <div id="nameScreen" class="screen">
-        <img src="pet.png" class="pet" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712035.png'">
-        <div class="speech-bubble">Salom, do'stim! Ismingni ayt, Python olamiga sayohatni boshlaymiz!</div>
-        <input type="text" id="nameInput" placeholder="Ismingiz..." style="padding:15px; border-radius:15px; border:3px solid #eee;">
-        <button class="btn" onclick="saveUser()">KIRISH</button>
+    <div id="nameScreen" class="screen active">
+        <h1 style="text-align:center; color: var(--green);">LEARNIX</h1>
+        <p style="text-align:center;">Xush kelibsiz, jangchi! Ismingni kirit:</p>
+        <input type="text" id="nameInput" style="padding:15px; border-radius:15px; border:none; background:#2c3e50; color:white; font-size:18px;">
+        <button class="btn btn-green" onclick="saveUser()">Boshlash</button>
     </div>
 
     <div id="dashScreen" class="screen">
-        <h3 id="welcomeMsg">Salom!</h3>
-        <p>Beginner kursi: 10 ta daraja</p>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <h2 id="welcomeMsg">Salom!</h2>
+            <div id="streakBadge" class="streak-badge">🔥 STREAK: 0</div>
+        </div>
         <div class="level-grid" id="levelGrid"></div>
-        <button class="btn btn-purple" onclick="showScreen('shopScreen')">DO'KON & BOOSTERS ⚡</button>
-        <button class="btn btn-gold" onclick="alert('Learnix v2.0\nMuallif: Baxtibek\nMaqsad: Pythonni qiziqarli o\'rganish!')">INFO ℹ️</button>
+        <button class="btn btn-gold" onclick="showScreen('shopScreen')">SHOP 🛒</button>
     </div>
 
     <div id="quizScreen" class="screen">
-        <div class="q-header">
-            <span id="qIdxText">Savol: 1/15</span>
-            <span id="timerText"></span>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span id="qIdxText">SAVOL: 1/15</span>
+            <span style="color:var(--gold)">STREAK BONUS: <span id="bonusText">0</span></span>
         </div>
-        <h3 id="questionText">...</h3>
+        <div id="questionBox" style="background:#253347; padding:20px; border-radius:20px; margin-bottom:20px; border-left: 6px solid var(--blue);">
+            <h3 id="questionText">Yuklanmoqda...</h3>
+        </div>
         <div id="optionsContainer"></div>
     </div>
 
     <div id="shopScreen" class="screen">
-        <h3>⚡ Super Do'kon</h3>
-        <div class="quest-item">Gems: <span id="shopGems">0</span></div>
-        <button class="btn btn-purple" onclick="buyBoost()">2X Booster (10 min) - 50 💎</button>
-        <button class="btn btn-green" onclick="buyHealth(20, 5)">+5 ❤️ - 20 💎</button>
-        <button class="btn btn-green" onclick="buyHealth(50, 11)">+11 ❤️ - 50 💎</button>
-        <button class="btn btn-gold" onclick="buyHealth(1000, 25)">+25 ❤️ - 1000 💎</button>
+        <h2>DO'KON</h2>
+        <button class="btn btn-green" onclick="buyHealth(20, 5)">+5 ❤️ (20 💎)</button>
         <button class="btn" onclick="showScreen('dashScreen')">ORQAGA</button>
     </div>
 </div>
 
 <script>
     let state = {
-        name: "", gems: 0, health: 5, 
-        unlockedLevel: 1, multiplier: 1, 
-        boostUntil: 0, lessonsDone: 0
+        name: "", gems: 0, points: 0, health: 5, unlockedLevel: 1, streak: 0
     };
 
     let currentLvl = 1;
     let currentQ = 0;
-    const totalQPerLvl = 15;
+    const totalQ = 15;
+
+    const pythonQuestions = [
+        { q: "Python-da matn qanday belgilanadi?", o: ["' '", "{}", "[]"], c: 0 },
+        { q: "Qaysi biri o'zgaruvchi nomi bo'la oladi?", o: ["1-son", "son_1", "son!1"], c: 1 },
+        { q: "Ekranga chiqarish buyrug'i qaysi?", o: ["input", "print", "display"], c: 1 },
+        { q: "Integer nima?", o: ["Matn", "Butun son", "Rasm"], c: 1 },
+        { q: "Ro'yxat yaratish uchun qaysi belgi kerak?", o: "[] () {}".split(' '), c: 0 },
+        { q: "Python asoschisi kim?", o: ["Bill Gates", "Guido van Rossum", "Elon Musk"], c: 1 },
+        { q: "True va False nima?", o: ["String", "Boolean", "Float"], c: 1 },
+        { q: "Foydalanuvchidan ma'lumot olish?", o: ["print", "input", "get"], c: 1 },
+        { q: "Dasturda xato bo'lsa nima deyiladi?", o: ["Bug", "Feature", "Virus"], c: 0 },
+        { q: "Qaysi biri matematik operator emas?", o: ["+", "*", "="], c: 2 },
+        { q: "Bo'lish qoldig'ini topish?", o: ["%", "/", "//"], c: 0 },
+        { q: "Mantiqiy 'VA' operatori?", o: ["or", "and", "not"], c: 1 },
+        { q: "Tsikl (Takrorlash) operatori?", o: ["for", "if", "else"], c: 0 },
+        { q: "Qaysi til soddaroq?", o: ["C++", "Python", "Java"], c: 1 },
+        { q: "Python fayl kengaytmasi?", o: [".py", ".html", ".exe"], c: 0 }
+    ];
 
     window.onload = () => {
-        const saved = localStorage.getItem('learnix_pro');
+        const saved = localStorage.getItem('learnix_ultra');
         if(saved) {
             state = JSON.parse(saved);
             updateUI();
             showScreen('dashScreen');
-        } else {
-            showScreen('nameScreen');
         }
     };
 
@@ -148,6 +165,9 @@
             grid.appendChild(div);
         }
         document.getElementById('welcomeMsg').innerText = `Salom, ${state.name}!`;
+        const badge = document.getElementById('streakBadge');
+        if(state.streak > 1) { badge.style.display = 'block'; badge.innerText = `🔥 STREAK: ${state.streak}`; }
+        else badge.style.display = 'none';
     }
 
     function startLevel(l) {
@@ -158,51 +178,62 @@
     }
 
     function loadQuestion() {
-        const isBoosted = Date.now() < state.boostUntil;
-        document.getElementById('multDisplay').innerText = isBoosted ? "⚡ 2X ACTIVE" : "";
-        document.getElementById('qIdxText').innerText = `Savol: ${currentQ + 1} / ${totalQPerLvl}`;
-        document.getElementById('questionText').innerText = `Level ${currentLvl}: Python-da mantiqiy savol #${currentQ + 1}`;
+        const q = pythonQuestions[currentQ];
+        document.getElementById('qIdxText').innerText = `SAVOL: ${currentQ+1} / ${totalQ}`;
+        document.getElementById('questionText').innerText = q.q;
+        document.getElementById('bonusText').innerText = `+${state.streak}`;
         
         const container = document.getElementById('optionsContainer');
         container.innerHTML = "";
-        ["To'g'ri javob", "Xato javob A", "Xato javob B"].sort(() => Math.random() - 0.5).forEach(opt => {
-            const b = document.createElement('div');
-            b.className = "option";
-            b.innerText = opt;
-            b.onclick = () => checkAns(opt === "To'g'ri javob");
-            container.appendChild(b);
+        q.o.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = "option";
+            div.innerText = opt;
+            div.onclick = () => checkAns(i === q.c);
+            container.appendChild(div);
         });
     }
 
-    function checkAns(isCorrect) {
-        if(isCorrect) {
+    function showEffect(txt) {
+        const el = document.getElementById('effect-text');
+        el.innerText = txt;
+        el.classList.add('animate-effect');
+        setTimeout(() => el.classList.remove('animate-effect'), 800);
+    }
+
+    function checkAns(correct) {
+        if(correct) {
+            state.streak++;
+            let earned = 10 + state.streak; // Brawl stars-dek streak oshgani sari ball oshadi
+            state.points += earned;
+            
+            if(state.streak >= 3) showEffect("GREAT JOB!");
+            if(state.streak >= 7) showEffect("AWESOME!");
+            if(state.streak >= 12) showEffect("GODLIKE!");
+            
             currentQ++;
-            if(currentQ >= totalQPerLvl) finishLevel();
+            if(currentQ >= totalQ) finishLevel();
             else loadQuestion();
         } else {
             state.health--;
-            if(state.health <= 0) { alert("Quvvat tugadi!"); showScreen('dashScreen'); }
+            state.streak = 0;
+            state.points += 9; // Xato bo'lsa faqat 9 ball
+            showEffect("MISS!");
+            if(state.health <= 0) { alert("Game Over!"); showScreen('dashScreen'); }
             save();
+            currentQ++;
+            if(currentQ >= totalQ) finishLevel();
+            else loadQuestion();
         }
+        save();
     }
 
     function finishLevel() {
-        let reward = 3;
-        if(Date.now() < state.boostUntil) reward *= 2;
-        state.gems += reward;
+        state.gems += 5;
         if(currentLvl === state.unlockedLevel && state.unlockedLevel < 10) state.unlockedLevel++;
         save();
-        alert(`Level tugadi! +${reward} 💎`);
+        alert(`Daraja tugadi! +5 💎 yutdingiz.`);
         showScreen('dashScreen');
-    }
-
-    function buyBoost() {
-        if(state.gems >= 50) {
-            state.gems -= 50;
-            state.boostUntil = Date.now() + (10 * 60 * 1000);
-            save();
-            alert("2X Booster yoqildi! 10 daqiqa davom etadi.");
-        } else alert("Gems yetarli emas!");
     }
 
     function buyHealth(p, a) {
@@ -211,14 +242,14 @@
     }
 
     function save() {
-        localStorage.setItem('learnix_pro', JSON.stringify(state));
+        localStorage.setItem('learnix_ultra', JSON.stringify(state));
         updateUI();
     }
 
     function updateUI() {
         document.getElementById('h-val').innerText = state.health;
         document.getElementById('g-val').innerText = state.gems;
-        document.getElementById('shopGems').innerText = state.gems;
+        document.getElementById('p-val').innerText = state.points;
     }
 </script>
 </body>
